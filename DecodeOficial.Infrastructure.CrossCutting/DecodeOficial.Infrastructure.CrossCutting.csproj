@@ -4,4 +4,13 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DecodeOficial.Application\DecodeOficial.Application.csproj" />
+    <ProjectReference Include="..\DecodeOficial.Infrastructure.Data\DecodeOficial.Infrastructure.Data.csproj" />
+  </ItemGroup>
+
 </Project>
