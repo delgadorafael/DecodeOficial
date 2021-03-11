@@ -13,5 +13,7 @@ namespace DecodeOficial.Domain.Entities
         public string Email { get; set; }
         public string Hobbies { get; set; }
         public Status Status { get; set; }
+        public DateTime RegisterDate { get; set; }
+
     }
 }
