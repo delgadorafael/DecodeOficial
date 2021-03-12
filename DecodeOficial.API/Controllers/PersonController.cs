@@ -48,6 +48,24 @@ namespace DecodeOficial.API.Controllers
             }
         }
 
+        //GET api/value/lastname
+        [HttpGet("search/{search}")]
+        public ActionResult<IEnumerable<string>> Search(string search)
+
+        {
+            try
+            {
+                var _search = _applicationServicePerson.GetAll().Where( x => 
+                                                                        x.FirstName.ToLower() == search.ToLower() || 
+                                                                        x.LastName.ToLower() == search.ToLower());
+                return Ok(_search);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         //POST api/values
         [HttpPost]
         public ActionResult Post([FromBody] PersonDTO personDTO)
