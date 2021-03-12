@@ -56,8 +56,11 @@ namespace DecodeOficial.API.Controllers
             try
             {
                 var _search = _applicationServicePerson.GetAll().Where( x => 
-                                                                        x.FirstName.ToLower() == search.ToLower() || 
-                                                                        x.LastName.ToLower() == search.ToLower());
+                                                                        x.FirstName.ToLower().Contains(search.ToLower())||
+                                                                        x.LastName.ToLower().Contains(search.ToLower())
+                                                                        //x.FirstName.ToLower() == search.ToLower() || 
+                                                                        //x.LastName.ToLower() == search.ToLower()
+                                                                        );
                 return Ok(_search);
             }
             catch (Exception e)
