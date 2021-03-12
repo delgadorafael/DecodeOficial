@@ -21,11 +21,11 @@ namespace DecodeOficial.API.Controllers
 
         //GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<ActionResult<IEnumerable<string>>> Get()
         {
             try
             {
-                return Ok(_applicationServicePerson.GetAll());
+                return Ok(await _applicationServicePerson.GetAllAsync());
             }
             catch (Exception e)
             {
@@ -35,12 +35,12 @@ namespace DecodeOficial.API.Controllers
 
         //GET api/value/1
         [HttpGet("{id}")]
-        public ActionResult<IEnumerable<string>> Get(int id)
+        public async Task<ActionResult<IEnumerable<string>>> Get(int id)
 
         {
             try
             {
-                return Ok(_applicationServicePerson.GetById(id));
+                return Ok(await _applicationServicePerson.GetByIdAsync(id));
             }
             catch (Exception e)
             {
@@ -50,17 +50,16 @@ namespace DecodeOficial.API.Controllers
 
         //GET api/value/lastname
         [HttpGet("search/{search}")]
-        public ActionResult<IEnumerable<string>> Search(string search)
+        public async Task<ActionResult<IEnumerable<string>>> Search(string search)
 
         {
             try
             {
-                var _search = _applicationServicePerson.GetAll().Where( x => 
-                                                                        x.FirstName.ToLower().Contains(search.ToLower())||
-                                                                        x.LastName.ToLower().Contains(search.ToLower())
-                                                                        //x.FirstName.ToLower() == search.ToLower() || 
-                                                                        //x.LastName.ToLower() == search.ToLower()
-                                                                        );
+                var _search = await _applicationServicePerson.GetAllAsync();
+                _search = _search.Where(    x => 
+                                            x.FirstName.ToLower().Contains(search.ToLower())||
+                                            x.LastName.ToLower().Contains(search.ToLower())
+                                        );
                 return Ok(_search);
             }
             catch (Exception e)
@@ -71,14 +70,14 @@ namespace DecodeOficial.API.Controllers
 
         //POST api/values
         [HttpPost]
-        public ActionResult Post([FromBody] PersonDTO personDTO)
+        public async Task<ActionResult> Post([FromBody] PersonDTO personDTO)
         {
             try
             {
                 if (personDTO == null)
                     return NotFound();
 
-                _applicationServicePerson.Add(personDTO);
+                await _applicationServicePerson.AddAsync(personDTO);
                 return Ok("Person registered!");
             }
             catch (Exception e)
@@ -89,14 +88,14 @@ namespace DecodeOficial.API.Controllers
 
         //PUT api/values/1
         [HttpPut]
-        public ActionResult Put([FromBody] PersonDTO personDTO)
+        public async Task<ActionResult> Put([FromBody] PersonDTO personDTO)
         {
             try
             {
                 if (personDTO == null)
                     return NotFound();
 
-                _applicationServicePerson.Update(personDTO);
+                await _applicationServicePerson.UpdateAsync(personDTO);
                 return Ok("Person updated!");
             }
             catch (Exception e)
@@ -107,14 +106,14 @@ namespace DecodeOficial.API.Controllers
 
         //DELETE api/values/1
         [HttpDelete]
-        public ActionResult Delete([FromBody] PersonDTO personDTO)
+        public async Task<ActionResult> Delete([FromBody] PersonDTO personDTO)
         {
             try
             {
                 if (personDTO == null)
                     return NotFound();
 
-                _applicationServicePerson.Remove(personDTO);
+                await _applicationServicePerson.RemoveAsync(personDTO);
                 return Ok("Person deleted!");
             }
             catch (Exception e)

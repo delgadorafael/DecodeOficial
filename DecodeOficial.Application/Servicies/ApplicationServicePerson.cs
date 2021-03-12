@@ -6,6 +6,7 @@ using DecodeOficial.Domain.Interfaces.Servicies;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DecodeOficial.Application.Servicies
 {
@@ -20,34 +21,34 @@ namespace DecodeOficial.Application.Servicies
             _mapper = mapper;
         }
 
-        public void Add(PersonDTO obj)
+        public async Task AddAsync(PersonDTO obj)
         {
             var person = _mapper.Map<Person>(obj);
-            _servicePerson.Add(person);
+            await _servicePerson.AddAsync(person);
         }
 
-        public IEnumerable<PersonDTO> GetAll()
+        public async Task<IEnumerable<PersonDTO>> GetAllAsync()
         {
-            var person = _servicePerson.GetAll();
+            var person = await _servicePerson.GetAllAsync();
             return _mapper.Map<IEnumerable<PersonDTO>>(person);
         }
 
-        public PersonDTO GetById(int id)
+        public async Task<PersonDTO> GetByIdAsync(int id)
         {
-            var person = _servicePerson.GetById(id);
+            var person = await _servicePerson.GetByIdAsync(id);
             return _mapper.Map<PersonDTO>(person);
         }
 
-        public void Remove(PersonDTO obj)
+        public async Task RemoveAsync(PersonDTO obj)
         {
             var person = _mapper.Map<Person>(obj);
-            _servicePerson.Remove(person);
+            await _servicePerson.RemoveAsync(person);
         }
 
-        public void Update(PersonDTO obj)
+        public async Task UpdateAsync(PersonDTO obj)
         {
             var person = _mapper.Map<Person>(obj);
-            _servicePerson.Update(person);
+            await _servicePerson.UpdateAsync(person);
         }
     }
 }

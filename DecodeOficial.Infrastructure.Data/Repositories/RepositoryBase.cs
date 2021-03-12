@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DecodeOficial.Infrastructure.Data.Repositories
 {
@@ -16,12 +17,12 @@ namespace DecodeOficial.Infrastructure.Data.Repositories
             _decodeContext = decodeContext;
         }
 
-        public void Add(T obj)
+        public async Task AddAsync(T obj)
         {
             try
             {
                 _decodeContext.Set<T>().Add(obj);
-                _decodeContext.SaveChanges();
+                await _decodeContext.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -29,11 +30,11 @@ namespace DecodeOficial.Infrastructure.Data.Repositories
             }
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
             try
             {
-                return _decodeContext.Set<T>().ToList();
+                return await _decodeContext.Set<T>().ToListAsync();
             }
             catch (Exception e)
             {
@@ -41,11 +42,11 @@ namespace DecodeOficial.Infrastructure.Data.Repositories
             }
         }
 
-        public T GetById(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
             try
             {
-                return _decodeContext.Set<T>().Find(id);
+                return await _decodeContext.Set<T>().FindAsync(id);
             }
             catch (Exception e)
             {
@@ -53,12 +54,12 @@ namespace DecodeOficial.Infrastructure.Data.Repositories
             }
         }
 
-        public void Remove(T obj)
+        public async Task RemoveAsync(T obj)
         {
             try
             {
                 _decodeContext.Set<T>().Remove(obj);
-                _decodeContext.SaveChanges();
+                await _decodeContext.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -66,12 +67,12 @@ namespace DecodeOficial.Infrastructure.Data.Repositories
             }
         }
 
-        public void Update(T obj)
+        public async Task UpdateAsync(T obj)
         {
             try
             {
                 _decodeContext.Entry(obj).State = EntityState.Modified;
-                _decodeContext.SaveChanges();
+                await _decodeContext.SaveChangesAsync();
             }
             catch (Exception e)
             {

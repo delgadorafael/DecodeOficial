@@ -1,14 +1,15 @@
 ﻿using DecodeOficial.Application.DTO;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DecodeOficial.Application.Interfaces
 {
     public interface IApplicationServicePerson
     {
-        void Add(PersonDTO obj);
-        void Update(PersonDTO obj);
-        void Remove(PersonDTO obj);
-        IEnumerable<PersonDTO> GetAll();
-        PersonDTO GetById(int id);
+        Task AddAsync(PersonDTO obj);
+        Task UpdateAsync(PersonDTO obj);
+        Task RemoveAsync(PersonDTO obj);
+        Task<IEnumerable<PersonDTO>> GetAllAsync();
+        Task<PersonDTO> GetByIdAsync(int id);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using DecodeOficial.Domain.Interfaces.Repositories;
 using DecodeOficial.Domain.Interfaces.Servicies;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DecodeOficial.Domain.Servicies
 {
@@ -13,29 +14,29 @@ namespace DecodeOficial.Domain.Servicies
             _repositoryBase = repositoryBase;
         }
 
-        public void Add(T obj)
+        public async Task AddAsync(T obj)
         {
-            _repositoryBase.Add(obj);
+            await _repositoryBase.AddAsync(obj);
         }
 
-        public void Update(T obj)
+        public async Task UpdateAsync(T obj)
         {
-            _repositoryBase.Update(obj);
+            await _repositoryBase.UpdateAsync(obj);
         }
 
-        public void Remove(T obj)
+        public async Task RemoveAsync(T obj)
         {
-            _repositoryBase.Remove(obj);
+            await _repositoryBase.RemoveAsync(obj);
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return _repositoryBase.GetAll();
+            return await _repositoryBase.GetAllAsync();
         }
 
-        public T GetById(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
-            return _repositoryBase.GetById(id);
+            return await _repositoryBase.GetByIdAsync(id);
         }
     }
 }
