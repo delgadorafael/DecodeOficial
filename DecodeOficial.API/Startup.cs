@@ -10,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
+using System.IO;
+using System.Reflection;
 
 namespace DecodeOficial.API
 {
@@ -29,9 +32,24 @@ namespace DecodeOficial.API
             services.AddAutoMapper(typeof(AutoMapperConfiguration)); 
             services.AddControllers();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-            services.AddSwaggerGen(x =>
+            services.AddSwaggerGen(c =>
             {
-                x.SwaggerDoc("v1", new OpenApiInfo { Title = "API Decode", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "API Decode",
+                    Description = "ASP.NET Core Web API Project",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Rafael Delgado",
+                        Email = "rafa12del@hotmail.com",
+                        Url = new Uri("https://github.com/delgadorafael"),
+                    }
+                });
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
         }
 
@@ -52,7 +70,7 @@ namespace DecodeOficial.API
 
             app.UseSwaggerUI(x =>
             {
-                x.SwaggerEndpoint("/swagger/v1/swagger.json", "API Decode");
+                x.SwaggerEndpoint("/swagger/v1/swagger.json", "API Decode v1");
             });
 
             app.UseHttpsRedirection();
