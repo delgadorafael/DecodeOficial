@@ -46,7 +46,10 @@ namespace DecodeOficial.Infrastructure.Data.Repositories
         {
             try
             {
-                return await _decodeContext.Set<T>().FindAsync(id);
+                //var _context = _decodeContext.Set<T>().AsNoTracking().ToListAsync();
+                var _context = _decodeContext.Set<T>().FindAsync(id);
+                //_decodeContext.Entry(_context).State = EntityState.Detached;
+                return await _context;
             }
             catch (Exception e)
             {

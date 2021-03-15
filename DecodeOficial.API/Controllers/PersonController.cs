@@ -6,6 +6,7 @@ using DecodeOficial.Application.DTO;
 using DecodeOficial.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DecodeOficial.API.Controllers
 {
@@ -192,9 +193,9 @@ namespace DecodeOficial.API.Controllers
                 if (personDTO == null)
                     return NotFound();
 
-                var _person = await _applicationServicePerson.GetByIdAsync(personDTO.Id);
-                if (_person == null)
-                    return NotFound("Non-existent Id");
+                //var _person = await _applicationServicePersonSearch.GetByIdAsync(personDTO.Id);
+                //if (_person == null)
+                //    return NotFound("Non-existent Id");
 
                 await _applicationServicePerson.UpdateAsync(personDTO);
                 return Ok("Person updated!");
@@ -218,16 +219,17 @@ namespace DecodeOficial.API.Controllers
         #endregion
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        //[HttpDelete("{id}")]
+        [HttpDelete]
+        public async Task<ActionResult> Delete(PersonDTO personDTO)
         {
             try
             {
-                var _person = await _applicationServicePerson.GetByIdAsync(id);
-                if (_person == null)
-                    return NotFound("Non-existent Id");
+                //var _person = await _applicationServicePersonSearch.GetByIdAsync(id);
+                //if (_person == null)
+                //    return NotFound("Non-existent Id");
 
-                await _applicationServicePerson.RemoveAsync(_person);
+                await _applicationServicePerson.RemoveAsync(personDTO);
                 return Ok("Person deleted!");
             }
             catch (Exception e)
@@ -236,5 +238,6 @@ namespace DecodeOficial.API.Controllers
             }
         }
         #endregion
+
     }
 }
