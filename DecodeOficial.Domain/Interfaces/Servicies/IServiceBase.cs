@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace DecodeOficial.Domain.Interfaces.Servicies
 {
     public interface IServiceBase<T> where T : class
     {
-        Task AddAsync(T obj);
-        Task UpdateAsync(T obj);
-        Task RemoveAsync(T obj);
-        Task<IEnumerable<T>> GetAllAsync();
-        Task<T> GetByIdAsync(int id);
+        IEnumerable<T> GetAll();
+        T GetById(int id);
+        void Add(T obj);
+        void Update(T obj);
+        void Remove(T obj);
     }
 }

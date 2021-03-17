@@ -13,19 +13,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Domain", "3 - Domain", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Infrastructure", "4 - Infrastructure", "{0C17277A-EBDF-4037-8A1F-4765B6D6769B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.1 - CrossCutting", "4.1 - CrossCutting", "{7265B103-924D-43CC-AF91-5385B4F09C25}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.2 - Data", "4.2 - Data", "{79ACCE40-B872-4B90-9FEA-A6106B39B3E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DecodeOficial.Infrastructure.CrossCutting", "DecodeOficial.Infrastructure.CrossCutting\DecodeOficial.Infrastructure.CrossCutting.csproj", "{C1D091FF-6EE1-4D6A-BA16-2439D8BCF2EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DecodeOficial.Infrastructure.Data", "DecodeOficial.Infrastructure.Data\DecodeOficial.Infrastructure.Data.csproj", "{BCB8D78A-ADF8-4D2B-991D-47F41AA3C1DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DecodeOficial.Infrastructure.Data", "DecodeOficial.Infrastructure.Data\DecodeOficial.Infrastructure.Data.csproj", "{BCB8D78A-ADF8-4D2B-991D-47F41AA3C1DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DecodeOficial.Domain", "DecodeOficial.Domain\DecodeOficial.Domain.csproj", "{7F8FA090-D127-4121-8708-188149EB3168}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DecodeOficial.Domain", "DecodeOficial.Domain\DecodeOficial.Domain.csproj", "{7F8FA090-D127-4121-8708-188149EB3168}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DecodeOficial.Application", "DecodeOficial.Application\DecodeOficial.Application.csproj", "{D59E0336-1674-4270-9329-08DDB1857472}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DecodeOficial.Application", "DecodeOficial.Application\DecodeOficial.Application.csproj", "{D59E0336-1674-4270-9329-08DDB1857472}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DecodeOficial.API", "DecodeOficial.API\DecodeOficial.API.csproj", "{8D5E9B37-9971-4370-958C-1701AB0E62A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DecodeOficial.API", "DecodeOficial.API\DecodeOficial.API.csproj", "{8D5E9B37-9971-4370-958C-1701AB0E62A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +29,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C1D091FF-6EE1-4D6A-BA16-2439D8BCF2EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1D091FF-6EE1-4D6A-BA16-2439D8BCF2EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1D091FF-6EE1-4D6A-BA16-2439D8BCF2EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1D091FF-6EE1-4D6A-BA16-2439D8BCF2EA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BCB8D78A-ADF8-4D2B-991D-47F41AA3C1DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BCB8D78A-ADF8-4D2B-991D-47F41AA3C1DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCB8D78A-ADF8-4D2B-991D-47F41AA3C1DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -58,9 +50,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{7265B103-924D-43CC-AF91-5385B4F09C25} = {0C17277A-EBDF-4037-8A1F-4765B6D6769B}
 		{79ACCE40-B872-4B90-9FEA-A6106B39B3E9} = {0C17277A-EBDF-4037-8A1F-4765B6D6769B}
-		{C1D091FF-6EE1-4D6A-BA16-2439D8BCF2EA} = {7265B103-924D-43CC-AF91-5385B4F09C25}
 		{BCB8D78A-ADF8-4D2B-991D-47F41AA3C1DB} = {79ACCE40-B872-4B90-9FEA-A6106B39B3E9}
 		{7F8FA090-D127-4121-8708-188149EB3168} = {694C3346-D57A-4C45-894D-684D180A6CCE}
 		{D59E0336-1674-4270-9329-08DDB1857472} = {D8607C3B-779E-43D8-B799-9FDBE5E170D6}

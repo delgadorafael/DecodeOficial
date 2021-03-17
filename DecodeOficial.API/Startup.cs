@@ -1,7 +1,11 @@
 using Autofac;
 using DecodeOficial.Application.Mapper;
-using DecodeOficial.Infrastructure.CrossCutting.IOC;
+using DecodeOficial.Domain.Interfaces.Repositories;
+using DecodeOficial.Domain.Interfaces.Servicies;
+using DecodeOficial.Domain.Servicies;
 using DecodeOficial.Infrastructure.Data.Context;
+using DecodeOficial.Infrastructure.Data.Repositories;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -29,9 +33,15 @@ namespace DecodeOficial.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DecodeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DecodeContext")));
-            services.AddAutoMapper(typeof(AutoMapperConfiguration)); 
+            services.AddAutoMapper(typeof(AutoMapperConfiguration));
+            services.AddScoped<IServicePerson, ServicePerson>();
+
+            //EF Core
+            services.AddScoped<IRepositoryPerson, RepositoryPerson>();
             services.AddControllers();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            var assembly = AppDomain.CurrentDomain.Load("DecodeOficial.Application");
+            services.AddMediatR(assembly);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -51,11 +61,6 @@ namespace DecodeOficial.API
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
-        }
-
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            builder.RegisterModule(new ModuleIOC());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
