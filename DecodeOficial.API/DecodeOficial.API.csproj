@@ -7,6 +7,8 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.1.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.4">
       <PrivateAssets>all</PrivateAssets>
@@ -18,9 +20,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DecodeOficial.Application\DecodeOficial.Application.csproj" />
-    <ProjectReference Include="..\DecodeOficial.Infrastructure.CrossCutting\DecodeOficial.Infrastructure.CrossCutting.csproj" />
     <ProjectReference Include="..\DecodeOficial.Infrastructure.Data\DecodeOficial.Infrastructure.Data.csproj" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
 
 </Project>

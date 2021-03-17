@@ -13,11 +13,18 @@ namespace DecodeOficial.Domain.Servicies
             _repositoryBase = repositoryBase;
         }
 
+        public T GetById(int id)
+        {
+            return _repositoryBase.GetById(id);
+        }
+        public IEnumerable<T> GetAll()
+        {
+            return _repositoryBase.GetAll();
+        }
         public void Add(T obj)
         {
             _repositoryBase.Add(obj);
         }
-
         public void Update(T obj)
         {
             _repositoryBase.Update(obj);
@@ -26,16 +33,6 @@ namespace DecodeOficial.Domain.Servicies
         public void Remove(T obj)
         {
             _repositoryBase.Remove(obj);
-        }
-
-        public IEnumerable<T> GetAll()
-        {
-            return _repositoryBase.GetAll();
-        }
-
-        public T GetById(int id)
-        {
-            return _repositoryBase.GetById(id);
         }
     }
 }

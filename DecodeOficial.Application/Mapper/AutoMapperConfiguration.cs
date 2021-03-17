@@ -2,8 +2,6 @@
 using DecodeOficial.Application.DTO;
 using DecodeOficial.Domain.Entities;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DecodeOficial.Application.Mapper
 {
@@ -11,7 +9,16 @@ namespace DecodeOficial.Application.Mapper
     {
         public AutoMapperConfiguration()
         {
-            CreateMap<Person, PersonDTO>().ReverseMap();
+            CreateMap<Person, PersonDTO>()
+                .ReverseMap()
+                .ForMember(x => x.BirthDate, option => option.MapFrom(src => src.BirthDate.ToString("dd/MM/yyyy")));
+            CreateMap<Person, PersonCreateDTO>()
+                .ReverseMap()
+                .ForMember(x => x.BirthDate, option => option.MapFrom(src => (DateTime)src.BirthDate));
+            CreateMap<Person, PersonUpdateDTO>()
+                .ReverseMap()
+                .ForMember(x => x.BirthDate, option => option.MapFrom(src => (DateTime)src.BirthDate)); ;
+            CreateMap<Person, PersonDeleteDTO>().ReverseMap();
         }
     }
 }

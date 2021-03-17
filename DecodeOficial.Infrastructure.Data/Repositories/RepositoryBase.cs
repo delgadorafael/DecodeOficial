@@ -1,7 +1,6 @@
 ﻿using DecodeOficial.Domain.Interfaces.Repositories;
 using DecodeOficial.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,67 +15,33 @@ namespace DecodeOficial.Infrastructure.Data.Repositories
             _decodeContext = decodeContext;
         }
 
-        public void Add(T obj)
-        {
-            try
-            {
-                _decodeContext.Set<T>().Add(obj);
-                _decodeContext.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-
         public IEnumerable<T> GetAll()
         {
-            try
-            {
-                return _decodeContext.Set<T>().ToList();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            return _decodeContext.Set<T>().ToList();
         }
-
         public T GetById(int id)
         {
-            try
+            var _entity = _decodeContext.Set<T>().Find(id);
+            if (_entity != null)
             {
-                return _decodeContext.Set<T>().Find(id);
+                _decodeContext.Entry(_entity).State = EntityState.Detached;
             }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            return _entity;
         }
-
-        public void Remove(T obj)
+        public void Add(T obj)
         {
-            try
-            {
-                _decodeContext.Set<T>().Remove(obj);
-                _decodeContext.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            _decodeContext.Set<T>().Add(obj);
+            _decodeContext.SaveChanges();
         }
-
         public void Update(T obj)
         {
-            try
-            {
-                _decodeContext.Entry(obj).State = EntityState.Modified;
-                _decodeContext.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            _decodeContext.Set<T>().Update(obj);
+            _decodeContext.SaveChanges();
+        }
+        public void Remove(T obj)
+        {
+            _decodeContext.Set<T>().Remove(obj);
+            _decodeContext.SaveChanges();
         }
     }
 }
