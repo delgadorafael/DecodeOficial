@@ -4,6 +4,8 @@ using DecodeOficial.Application.Query;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DecodeOficial.API.Controllers
@@ -31,10 +33,11 @@ namespace DecodeOficial.API.Controllers
         #endregion
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        public async Task<IActionResult> GetAllAsync()
         {
             var query = new PersonGetAllQuery();
             var result = await _mediator.Send(query);
+            Log.Information("PersonController: Returned list of people with {0} registers", result.Count().ToString());
             return Ok(result);
         }
         #endregion 
@@ -56,7 +59,16 @@ namespace DecodeOficial.API.Controllers
         {
             var query = new PersonGetByIdQuery { Id = id };
             var result = await _mediator.Send(query);
-            return result != null ? (IActionResult)Ok(result) : NotFound();
+            if (result != null)
+            {
+                Log.Information("PersonController: Returned person {@result}", result);
+                return Ok(result);
+            }
+            else
+            {
+                Log.Error("PersonController: Returned null on searching by Id: {0}", id.ToString());
+                return NotFound();
+            }
         }
         #endregion
 
@@ -75,6 +87,14 @@ namespace DecodeOficial.API.Controllers
         {
             var query = new PersonSearchQuery { Search = search };
             var result = await _mediator.Send(query);
+            if (result.Count() != 0)
+            {
+                Log.Information("PersonController: Returned list of people for searching with {0} registers with filter {1}", result.Count().ToString(), search);
+            }
+            else
+            {
+                Log.Error("PersonController: Returned null on searching names by filter: {0}", search);
+            }
             return Ok(result);
         }
         #endregion
@@ -109,6 +129,7 @@ namespace DecodeOficial.API.Controllers
         {
             var command = new PersonCreateCommand { personCreateDTO = personCreateDTO };
             await _mediator.Send(command);
+            Log.Information("PersonController: Created person {@person}", personCreateDTO);
             return Ok("Person registered!");
         }
         #endregion
@@ -150,10 +171,13 @@ namespace DecodeOficial.API.Controllers
             {
                 var command = new PersonUpdateCommand { personUpdateDTO = personUpdateDTO };
                 await _mediator.Send(command);
+                var postUpdate = new PersonGetByIdQuery { Id = personUpdateDTO.Id };
+                Log.Information("PersonController: Update person Id: {id}. From {@result} to {@postUpdate}", personUpdateDTO.Id.ToString(), result, postUpdate);
                 return Ok("Person updated!");
             }
             else
             {
+                Log.Error("PersonController: Returned null on searching for update with Id: {0}", personUpdateDTO.Id.ToString());
                 return NotFound();
             }
         }
@@ -181,10 +205,12 @@ namespace DecodeOficial.API.Controllers
             {
                 var command = new PersonDeleteCommand { Id = id };
                 await _mediator.Send(command);
+                Log.Information("PersonController: Deleted person {@result}", result);
                 return Ok("Person deleted!");
             }
             else
             {
+                Log.Error("PersonController: Returned null on searching for delete by Id: {0}", id.ToString());
                 return NotFound();
             }
         }
