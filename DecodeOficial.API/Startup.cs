@@ -33,7 +33,10 @@ namespace DecodeOficial.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DecodeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DecodeContext")));
+            //var connection = @"Server=db;Database=master;User=sa;Password=Your_password123;";
+
+            //services.AddDbContext<DecodeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DecodeContext")));
+            services.AddDbContext<DecodeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DecodeContextDocker")));
             services.AddAutoMapper(typeof(AutoMapperConfiguration));
             services.AddScoped<IServicePerson, ServicePerson>();
 
