@@ -19,6 +19,20 @@ namespace DecodeOficial.Infrastructure.Data.Context
         public DbSet<Person> People { get; set; }
         public DbSet<Profession> Professions { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity("DecodeOficial.Domain.Entities.Person", b =>
+            {
+                b.HasOne("DecodeOficial.Domain.Entities.Profession", "Profession")
+                    .WithMany()
+                    .HasForeignKey("ProfessionId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+
+                b.Navigation("Profession");
+            });
+        }
+
         public override int SaveChanges()
         {
             //For each interaction with database, verifies if there is a property named "RegisterDate"
