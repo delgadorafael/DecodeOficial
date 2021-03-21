@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DecodeOficial.Application.Command;
-using DecodeOficial.Application.DTO;
+using DecodeOficial.Application.DTO.Person;
 using DecodeOficial.Domain.Entities;
 using DecodeOficial.Domain.Interfaces.Servicies;
 using MediatR;

@@ -1,8 +1,10 @@
 ﻿using DecodeOficial.Domain.Interfaces.Repositories;
 using DecodeOficial.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace DecodeOficial.Infrastructure.Data.Repositories
 {
@@ -15,11 +17,11 @@ namespace DecodeOficial.Infrastructure.Data.Repositories
             _decodeContext = decodeContext;
         }
 
-        public IEnumerable<T> GetAll()
+        public virtual IEnumerable<T> GetAll()
         {
             return _decodeContext.Set<T>().ToList();
         }
-        public T GetById(int id)
+        public virtual T GetById(int id)
         {
             var _entity = _decodeContext.Set<T>().Find(id);
             if (_entity != null)

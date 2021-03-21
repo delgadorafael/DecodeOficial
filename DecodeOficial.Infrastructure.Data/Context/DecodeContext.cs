@@ -17,6 +17,7 @@ namespace DecodeOficial.Infrastructure.Data.Context
         }
 
         public DbSet<Person> People { get; set; }
+        public DbSet<Profession> Professions { get; set; }
 
         public override int SaveChanges()
         {

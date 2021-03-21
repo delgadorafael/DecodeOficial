@@ -1,5 +1,5 @@
 ﻿using DecodeOficial.Application.Command;
-using DecodeOficial.Application.DTO;
+using DecodeOficial.Application.DTO.Person;
 using DecodeOficial.Application.Query;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -127,10 +127,20 @@ namespace DecodeOficial.API.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] PersonCreateDTO personCreateDTO)
         {
-            var command = new PersonCreateCommand { personCreateDTO = personCreateDTO };
-            await _mediator.Send(command);
-            Log.Information("PersonController: Created person {@person}", personCreateDTO);
-            return Ok("Person registered!");
+            var queryProfession = new ProfessionGetByIdQuery {Id = personCreateDTO.ProfessionId };
+            var resultProfession = await _mediator.Send(queryProfession);
+            if (resultProfession == null)
+            {
+                Log.Error("PersonController: Inexistent profession with Id: {0}", personCreateDTO.ProfessionId.ToString());
+                return NotFound("Inexistent profession");
+            }
+            else
+            {
+                var command = new PersonCreateCommand { personCreateDTO = personCreateDTO };
+                await _mediator.Send(command);
+                Log.Information("PersonController: Created person {@person}", personCreateDTO);
+                return Ok("Person registered!");
+            }
         }
         #endregion
 
@@ -169,11 +179,22 @@ namespace DecodeOficial.API.Controllers
 
             if (result != null)
             {
-                var command = new PersonUpdateCommand { personUpdateDTO = personUpdateDTO };
-                await _mediator.Send(command);
-                var postUpdate = new PersonGetByIdQuery { Id = personUpdateDTO.Id };
-                Log.Information("PersonController: Update person Id: {id}. From {@result} to {@postUpdate}", personUpdateDTO.Id.ToString(), result, postUpdate);
-                return Ok("Person updated!");
+                var queryProfession = new ProfessionGetByIdQuery { Id = personUpdateDTO.ProfessionId };
+                var resultProfession = await _mediator.Send(queryProfession);
+
+                if (resultProfession == null)
+                {
+                    Log.Error("PersonController: Inexistent profession with Id: {0}", personUpdateDTO.ProfessionId.ToString());
+                    return NotFound("Inexistent profession");
+                }
+                else
+                {
+                    var command = new PersonUpdateCommand { personUpdateDTO = personUpdateDTO };
+                    await _mediator.Send(command);
+                    var postUpdate = new PersonGetByIdQuery { Id = personUpdateDTO.Id };
+                    Log.Information("PersonController: Update person Id: {id}. From {@result} to {@postUpdate}", personUpdateDTO.Id.ToString(), result, postUpdate);
+                    return Ok("Person updated!");
+                }
             }
             else
             {

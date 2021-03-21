@@ -33,13 +33,16 @@ namespace DecodeOficial.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<DecodeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DecodeContext")));
-            services.AddDbContext<DecodeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DecodeContextDocker")));
+            services.AddDbContext<DecodeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DecodeContext")));
+            //services.AddDbContext<DecodeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DecodeContextDocker")));
             services.AddAutoMapper(typeof(AutoMapperConfiguration));
-            services.AddScoped<IServicePerson, ServicePerson>();
 
-            //EF Core
+            services.AddScoped<IServicePerson, ServicePerson>();
+            services.AddScoped<IServiceProfession, ServiceProfession>();
+            
             services.AddScoped<IRepositoryPerson, RepositoryPerson>();
+            services.AddScoped<IRepositoryProfession, RepositoryProfession>();
+
             services.AddControllers();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             var assembly = AppDomain.CurrentDomain.Load("DecodeOficial.Application");
