@@ -1,16 +1,28 @@
 version: "3.9"
     
 services:
+    decodeoficial-api:
+        container_name: decodeoficial-api
+        build: .
+        environment: 
+            ConnectionString: 'Server=sql-server-db; Database = DecodeOficial; User Id = sa; Password = MyStr@ngPassw0rd;'
+        ports: 
+            - 8080:80
+        depends_on:
+            - elasticsearch
+            - sql-server-db
+
     sql-server-db:
         container_name: sql-server-db
         image: mcr.microsoft.com/mssql/server:2019-latest
         ports:
-            - 1433:1433
+            - 12000:1433
         volumes:
             - db-data:/usr/share/mssql/data
         environment:
-            SA_PASSWORD: super_password
-            ACCEPT_EULA: "Y"
+            SA_PASSWORD: 'MyStr@ngPassw0rd'
+            ACCEPT_EULA: 'Y'
+            MSSQL_PID: 'Developer'
 
     elasticsearch:
         container_name: elasticsearch

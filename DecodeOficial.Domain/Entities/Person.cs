@@ -1,6 +1,7 @@
 ﻿using DecodeOficial.Domain.Enumerators;
 using DecodeOficial.Domain.Interfaces.Entities;
 using System;
+using System.Collections.Generic;
 
 namespace DecodeOficial.Domain.Entities
 {
@@ -8,10 +9,11 @@ namespace DecodeOficial.Domain.Entities
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Profession { get; set; }
+        public int ProfessionId { get; set; }
+        public Profession Profession { get; set; }
         public DateTime BirthDate { get; set; }
         public string Email { get; set; }
-        public string Hobbies { get; set; }
+        public IEnumerable<PeopleHobbies> Hobbies { get; set; }
         public Status Status { get; set; }
         public DateTime RegisterDate { get; set; }
 

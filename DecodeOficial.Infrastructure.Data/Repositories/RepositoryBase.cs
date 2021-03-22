@@ -15,11 +15,11 @@ namespace DecodeOficial.Infrastructure.Data.Repositories
             _decodeContext = decodeContext;
         }
 
-        public IEnumerable<T> GetAll()
+        public virtual IEnumerable<T> GetAll()
         {
             return _decodeContext.Set<T>().ToList();
         }
-        public T GetById(int id)
+        public virtual T GetById(int id)
         {
             var _entity = _decodeContext.Set<T>().Find(id);
             if (_entity != null)
@@ -33,7 +33,7 @@ namespace DecodeOficial.Infrastructure.Data.Repositories
             _decodeContext.Set<T>().Add(obj);
             _decodeContext.SaveChanges();
         }
-        public void Update(T obj)
+        public virtual void Update(T obj)
         {
             _decodeContext.Set<T>().Update(obj);
             _decodeContext.SaveChanges();

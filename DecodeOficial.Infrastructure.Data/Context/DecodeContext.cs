@@ -17,6 +17,26 @@ namespace DecodeOficial.Infrastructure.Data.Context
         }
 
         public DbSet<Person> People { get; set; }
+        public DbSet<Profession> Professions { get; set; }
+        public DbSet<Hobby> Hobbies { get; set; }
+        public DbSet<PeopleHobbies> PeopleHobbies { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity("DecodeOficial.Domain.Entities.Person", b =>
+            {
+                b.HasOne("DecodeOficial.Domain.Entities.Profession", "Profession")
+                    .WithMany()
+                    .HasForeignKey("ProfessionId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+
+                b.Navigation("Profession");
+            });
+
+            modelBuilder.Entity<PeopleHobbies>()
+                .HasKey(x => new { x.PersonId, x.HobbyId });
+        }
 
         public override int SaveChanges()
         {

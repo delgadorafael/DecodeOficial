@@ -1,4 +1,4 @@
-﻿namespace DecodeOficial.Application.DTO
+﻿namespace DecodeOficial.Application.DTO.Person
 {
     public class PersonDeleteDTO
     {

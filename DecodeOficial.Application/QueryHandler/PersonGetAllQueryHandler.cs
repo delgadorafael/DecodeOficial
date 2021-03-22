@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using DecodeOficial.Application.DTO;
+using DecodeOficial.Application.DTO.Person;
 using DecodeOficial.Application.Query;
 using DecodeOficial.Domain.Entities;
 using DecodeOficial.Domain.Interfaces.Servicies;
 using MediatR;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace DecodeOficial.Application.QueryHandler

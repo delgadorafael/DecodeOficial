@@ -1,4 +1,3 @@
-using Autofac;
 using DecodeOficial.Application.Mapper;
 using DecodeOficial.Domain.Interfaces.Repositories;
 using DecodeOficial.Domain.Interfaces.Servicies;
@@ -33,13 +32,22 @@ namespace DecodeOficial.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<DecodeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DecodeContext")));
-            services.AddDbContext<DecodeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DecodeContextDocker")));
-            services.AddAutoMapper(typeof(AutoMapperConfiguration));
-            services.AddScoped<IServicePerson, ServicePerson>();
+            var connection = Configuration["ConnectionString"];
+            services.AddDbContext<DecodeContext>
+                (options => options.UseSqlServer(connection));
 
-            //EF Core
+            services.AddAutoMapper(typeof(AutoMapperConfiguration));
+
+            services.AddScoped<IServicePerson, ServicePerson>();
+            services.AddScoped<IServiceProfession, ServiceProfession>();
+            services.AddScoped<IServiceHobby, ServiceHobby>();
+            services.AddScoped<IServicePeopleHobbies, ServicePeopleHobbies>();
+
             services.AddScoped<IRepositoryPerson, RepositoryPerson>();
+            services.AddScoped<IRepositoryProfession, RepositoryProfession>();
+            services.AddScoped<IRepositoryHobby, RepositoryHobby>();
+            services.AddScoped<IRepositoryPeopleHobbies, RepositoryPeopleHobbies>();
+
             services.AddControllers();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             var assembly = AppDomain.CurrentDomain.Load("DecodeOficial.Application");
@@ -92,6 +100,10 @@ namespace DecodeOficial.API
             {
                 endpoints.MapControllers();
             });
+
+            using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            using var context = serviceScope.ServiceProvider.GetService<DecodeContext>();
+            context.Database.Migrate();
         }
     }
 }

@@ -19,6 +19,36 @@ namespace DecodeOficial.Infrastructure.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("DecodeOficial.Domain.Entities.Hobby", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Hobbies");
+                });
+
+            modelBuilder.Entity("DecodeOficial.Domain.Entities.PeopleHobbies", b =>
+                {
+                    b.Property<int>("PersonId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HobbyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PersonId", "HobbyId");
+
+                    b.HasIndex("HobbyId");
+
+                    b.ToTable("PeopleHobbies");
+                });
+
             modelBuilder.Entity("DecodeOficial.Domain.Entities.Person", b =>
                 {
                     b.Property<int>("Id")
@@ -35,14 +65,11 @@ namespace DecodeOficial.Infrastructure.Data.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Hobbies")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Profession")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ProfessionId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("RegisterDate")
                         .HasColumnType("datetime2");
@@ -52,7 +79,60 @@ namespace DecodeOficial.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProfessionId");
+
                     b.ToTable("People");
+                });
+
+            modelBuilder.Entity("DecodeOficial.Domain.Entities.Profession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Professions");
+                });
+
+            modelBuilder.Entity("DecodeOficial.Domain.Entities.PeopleHobbies", b =>
+                {
+                    b.HasOne("DecodeOficial.Domain.Entities.Hobby", null)
+                        .WithMany("People")
+                        .HasForeignKey("HobbyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DecodeOficial.Domain.Entities.Person", null)
+                        .WithMany("Hobbies")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DecodeOficial.Domain.Entities.Person", b =>
+                {
+                    b.HasOne("DecodeOficial.Domain.Entities.Profession", "Profession")
+                        .WithMany()
+                        .HasForeignKey("ProfessionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Profession");
+                });
+
+            modelBuilder.Entity("DecodeOficial.Domain.Entities.Hobby", b =>
+                {
+                    b.Navigation("People");
+                });
+
+            modelBuilder.Entity("DecodeOficial.Domain.Entities.Person", b =>
+                {
+                    b.Navigation("Hobbies");
                 });
 #pragma warning restore 612, 618
         }

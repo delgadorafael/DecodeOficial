@@ -1,4 +1,4 @@
-﻿using DecodeOficial.Application.DTO;
+﻿using DecodeOficial.Application.DTO.Person;
 using MediatR;
 
 namespace DecodeOficial.Application.Command

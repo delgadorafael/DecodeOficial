@@ -1,5 +1,5 @@
 ﻿using DecodeOficial.Application.Command;
-using DecodeOficial.Application.DTO;
+using DecodeOficial.Application.DTO.Person;
 using DecodeOficial.Application.Query;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -111,11 +111,18 @@ namespace DecodeOficial.API.Controllers
         ///     {
         ///        "firstName": "John",
         ///        "lastName": "Doe",
-        ///        "profession": "Accountant",
+        ///        "professionId": 0",
         ///        "birthDate": "1991-01-01",
         ///        "email": "johndoe@does.com",
-        ///        "hobbies": "Math, Sudoku",
-        ///     }    
+        ///        "hobbies": [
+        ///         {
+        ///             "hobbyId": 0
+        ///         },
+        ///         {
+        ///             "hobbyId": 0
+        ///         }
+        ///         ]
+        ///     }
         /// </remarks>
         /// <param name="personCreateDTO"></param>
         /// <returns>Confirmation message</returns>
@@ -127,10 +134,32 @@ namespace DecodeOficial.API.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] PersonCreateDTO personCreateDTO)
         {
-            var command = new PersonCreateCommand { personCreateDTO = personCreateDTO };
-            await _mediator.Send(command);
-            Log.Information("PersonController: Created person {@person}", personCreateDTO);
-            return Ok("Person registered!");
+            foreach (var hobby in personCreateDTO.Hobbies)
+            {
+                var queryHobby = new HobbyGetByIdQuery { Id = hobby.HobbyId };
+                var resulthobby = await _mediator.Send(queryHobby);
+                if (resulthobby == null)
+                {
+                    Log.Error("PersonController: Inexistent hobby with Id: {0}", hobby.HobbyId.ToString());
+                    return NotFound("Hobby Id " + hobby.HobbyId.ToString() + " does not exist");
+                }
+            }
+
+            var queryProfession = new ProfessionGetByIdQuery {Id = personCreateDTO.ProfessionId };
+            var resultProfession = await _mediator.Send(queryProfession);
+
+            if (resultProfession == null)
+            {
+                Log.Error("PersonController: Inexistent profession with Id: {0}", personCreateDTO.ProfessionId.ToString());
+                return NotFound("Inexistent profession");
+            }
+            else
+            {
+                var command = new PersonCreateCommand { personCreateDTO = personCreateDTO };
+                await _mediator.Send(command);
+                Log.Information("PersonController: Created person {@person}", personCreateDTO);
+                return Ok("Person registered!");
+            }
         }
         #endregion
 
@@ -147,10 +176,17 @@ namespace DecodeOficial.API.Controllers
         ///        "id": 1,
         ///        "firstName": "John",
         ///        "lastName": "Doe",
-        ///        "profession": "Accountant",
+        ///        "professionId": 0",
         ///        "birthDate": "1991-01-01",
-        ///        "email": "johndoe@does.com"
-        ///        "hobbies": "Math, Sudoku",
+        ///        "email": "johndoe@does.com",
+        ///        "hobbies": [
+        ///         {
+        ///             "hobbyId": 0
+        ///         },
+        ///         {
+        ///             "hobbyId": 0
+        ///         }
+        ///         ],
         ///        "status": 1
         ///     }
         /// </remarks>
@@ -164,16 +200,38 @@ namespace DecodeOficial.API.Controllers
         [HttpPut]
         public async Task<ActionResult> Put([FromBody] PersonUpdateDTO personUpdateDTO)
         {
+            foreach (var hobby in personUpdateDTO.Hobbies)
+            {
+                var queryHobby = new HobbyGetByIdQuery { Id = hobby.HobbyId };
+                var resulthobby = await _mediator.Send(queryHobby);
+                if (resulthobby == null)
+                {
+                    Log.Error("PersonController: Inexistent hobby with Id: {0}", hobby.HobbyId.ToString());
+                    return NotFound("Hobby Id " + hobby.HobbyId.ToString() + " does not exist");
+                }
+            }
+
             var query = new PersonGetByIdQuery { Id = personUpdateDTO.Id };
             var result = await _mediator.Send(query);
 
             if (result != null)
             {
-                var command = new PersonUpdateCommand { personUpdateDTO = personUpdateDTO };
-                await _mediator.Send(command);
-                var postUpdate = new PersonGetByIdQuery { Id = personUpdateDTO.Id };
-                Log.Information("PersonController: Update person Id: {id}. From {@result} to {@postUpdate}", personUpdateDTO.Id.ToString(), result, postUpdate);
-                return Ok("Person updated!");
+                var queryProfession = new ProfessionGetByIdQuery { Id = personUpdateDTO.ProfessionId };
+                var resultProfession = await _mediator.Send(queryProfession);
+
+                if (resultProfession == null)
+                {
+                    Log.Error("PersonController: Inexistent profession with Id: {0}", personUpdateDTO.ProfessionId.ToString());
+                    return NotFound("Inexistent profession");
+                }
+                else
+                {
+                    var command = new PersonUpdateCommand { personUpdateDTO = personUpdateDTO };
+                    await _mediator.Send(command);
+                    var postUpdate = new PersonGetByIdQuery { Id = personUpdateDTO.Id };
+                    Log.Information("PersonController: Update person Id: {id}. From {@result} to {@postUpdate}", personUpdateDTO.Id.ToString(), result, postUpdate);
+                    return Ok("Person updated!");
+                }
             }
             else
             {
