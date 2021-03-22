@@ -6,6 +6,7 @@ services:
         build: .
         environment: 
             ConnectionString: 'Server=sql-server-db; Database = DecodeOficial; User Id = sa; Password = MyStr@ngPassw0rd;'
+            Serilog: WriteTo:0:Args:nodUris=http://elasticsearch:9200
         ports: 
             - 8080:80
         depends_on:
@@ -18,7 +19,7 @@ services:
         ports:
             - 12000:1433
         volumes:
-            - db-data:/usr/share/mssql/data
+            - ./sql-volume:/var/opt/mssql/data
         environment:
             SA_PASSWORD: 'MyStr@ngPassw0rd'
             ACCEPT_EULA: 'Y'
@@ -26,38 +27,28 @@ services:
 
     elasticsearch:
         container_name: elasticsearch
-        hostname: elasticsearch
         image: docker.elastic.co/elasticsearch/elasticsearch:7.11.2
         ports:
             - 9200:9200
             - 9300:9300
         volumes:
-            - elasticsearch-data:/usr/share/elasticsearch/data
+            - ./elasticsearch-data:/usr/share/elasticsearch/data
         environment:
             - xpack.monitoring.enabled=true
             - xpack.watcher.enabled=false
             - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
             - discovery.type=single-node
-        networks:
-            - elastic
 
     kibana:
         container_name: kibana
-        hostname: kibana
         image: docker.elastic.co/kibana/kibana:7.11.2
         ports:
-            - 5601:5601
-        links:
-            - elasticsearch:elasticsearch   
+            - 5601:5601   
         depends_on:
             - elasticsearch
-        networks:
-            - elastic
-
-networks:
-    elastic:
-        driver: bridge
+        environment: 
+            - ELASTICSEARCH_URL=http://localhost:9200
 
 volumes:
     elasticsearch-data:
-    db-data:
+    sql-volume:
