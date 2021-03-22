@@ -8,20 +8,20 @@ using System.Collections.Generic;
 
 namespace DecodeOficial.Application.QueryHandler
 {
-    public class PersonGetAllQueryHandler : RequestHandler<PersonGetAllQuery, IEnumerable<PersonDTO>>
+    public class PersonGetByProfessionHandler : RequestHandler<PersonGetByProfessionQuery, IEnumerable<PersonDTO>>
     {
         private readonly IMapper _mapper;
         private readonly IServicePerson _servicePerson;
 
-        public PersonGetAllQueryHandler(IMapper mapper, IServicePerson servicePerson)
+        public PersonGetByProfessionHandler(IMapper mapper, IServicePerson servicePerson)
         {
             _mapper = mapper;
             _servicePerson = servicePerson;
         }
 
-        protected override IEnumerable<PersonDTO> Handle(PersonGetAllQuery request)
+        protected override IEnumerable<PersonDTO> Handle(PersonGetByProfessionQuery request)
         {
-            var result = _servicePerson.GetAll();
+            var result = _servicePerson.GetByProfession(request.Id);
             return _mapper.Map<IEnumerable<Person>, IEnumerable<PersonDTO>>(result);
         }
     }

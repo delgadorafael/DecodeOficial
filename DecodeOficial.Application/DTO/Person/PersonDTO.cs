@@ -1,6 +1,8 @@
-﻿using DecodeOficial.Application.DTO.Profession;
+﻿using DecodeOficial.Application.DTO.PeopleHobbies;
+using DecodeOficial.Application.DTO.Profession;
 using DecodeOficial.Domain.Enumerators;
 using System;
+using System.Collections.Generic;
 
 namespace DecodeOficial.Application.DTO.Person
 {
@@ -12,7 +14,7 @@ namespace DecodeOficial.Application.DTO.Person
         public ProfessionDTO Profession { get; set; }
         public DateTime BirthDate { get; set; }
         public string Email { get; set; }
-        public string Hobbies { get; set; }
+        public IEnumerable<PeopleHobbiesDTO> Hobbies { get; set; }
         public Status Status { get; set; }
     }
 }

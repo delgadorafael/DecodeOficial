@@ -4,11 +4,11 @@ using DecodeOficial.Infrastructure.Data.Context;
 
 namespace DecodeOficial.Infrastructure.Data.Repositories
 {
-    public class RepositoryProfession : RepositoryBase<Profession>, IRepositoryProfession
+    public class RepositoryHobby : RepositoryBase<Hobby>, IRepositoryHobby
     {
         private readonly DecodeContext _decodeContext;
 
-        public RepositoryProfession(DecodeContext decodeContext) : base(decodeContext)
+        public RepositoryHobby(DecodeContext decodeContext) : base(decodeContext)
         {
             _decodeContext = decodeContext;
         }

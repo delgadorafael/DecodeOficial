@@ -1,4 +1,3 @@
-using Autofac;
 using DecodeOficial.Application.Mapper;
 using DecodeOficial.Domain.Interfaces.Repositories;
 using DecodeOficial.Domain.Interfaces.Servicies;
@@ -39,9 +38,13 @@ namespace DecodeOficial.API
 
             services.AddScoped<IServicePerson, ServicePerson>();
             services.AddScoped<IServiceProfession, ServiceProfession>();
-            
+            services.AddScoped<IServiceHobby, ServiceHobby>();
+            services.AddScoped<IServicePeopleHobbies, ServicePeopleHobbies>();
+
             services.AddScoped<IRepositoryPerson, RepositoryPerson>();
             services.AddScoped<IRepositoryProfession, RepositoryProfession>();
+            services.AddScoped<IRepositoryHobby, RepositoryHobby>();
+            services.AddScoped<IRepositoryPeopleHobbies, RepositoryPeopleHobbies>();
 
             services.AddControllers();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);

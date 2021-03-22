@@ -1,10 +1,8 @@
 ﻿using DecodeOficial.Domain.Interfaces.Repositories;
 using DecodeOficial.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace DecodeOficial.Infrastructure.Data.Repositories
 {
@@ -35,7 +33,7 @@ namespace DecodeOficial.Infrastructure.Data.Repositories
             _decodeContext.Set<T>().Add(obj);
             _decodeContext.SaveChanges();
         }
-        public void Update(T obj)
+        public virtual void Update(T obj)
         {
             _decodeContext.Set<T>().Update(obj);
             _decodeContext.SaveChanges();

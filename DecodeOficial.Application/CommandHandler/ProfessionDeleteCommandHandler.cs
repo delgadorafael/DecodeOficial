@@ -2,9 +2,6 @@
 using DecodeOficial.Application.Command;
 using DecodeOficial.Domain.Interfaces.Servicies;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DecodeOficial.Application.CommandHandler
 {

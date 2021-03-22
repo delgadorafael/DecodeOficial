@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DecodeOficial.Application.DTO.PeopleHobbies;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace DecodeOficial.Application.DTO.Person
@@ -30,6 +32,6 @@ namespace DecodeOficial.Application.DTO.Person
         public string Email { get; set; }
         
         [Required(ErrorMessage = "Enter the hobbies")]
-        public string Hobbies { get; set; }
+        public IEnumerable<PeopleHobbiesDTO> Hobbies { get; set; }
     }
 }

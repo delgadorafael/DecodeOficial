@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using DecodeOficial.Application.DTO.Hobby;
+using DecodeOficial.Application.DTO.PeopleHobbies;
 using DecodeOficial.Application.DTO.Person;
 using DecodeOficial.Application.DTO.Profession;
 using DecodeOficial.Domain.Entities;
@@ -22,6 +24,14 @@ namespace DecodeOficial.Application.Mapper
             CreateMap<Profession, ProfessionCreateDTO>().ReverseMap();
             CreateMap<Profession, ProfessionUpdateDTO>().ReverseMap();
             CreateMap<Profession, ProfessionDeleteDTO>().ReverseMap();
+
+            CreateMap<Hobby, HobbyDTO>().ReverseMap();
+            CreateMap<Hobby, HobbyCreateDTO>().ReverseMap();
+            CreateMap<Hobby, HobbyUpdateDTO>().ReverseMap();
+            CreateMap<Hobby, HobbyDeleteDTO>().ReverseMap();
+
+            CreateMap<PeopleHobbies, PeopleHobbiesDTO>().ReverseMap();
+
 
         }
     }

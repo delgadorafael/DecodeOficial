@@ -2,5 +2,6 @@
 {
     public class ProfessionDeleteDTO
     {
+        public int Id { get; set; }
     }
 }

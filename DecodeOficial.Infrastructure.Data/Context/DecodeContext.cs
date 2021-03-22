@@ -18,6 +18,8 @@ namespace DecodeOficial.Infrastructure.Data.Context
 
         public DbSet<Person> People { get; set; }
         public DbSet<Profession> Professions { get; set; }
+        public DbSet<Hobby> Hobbies { get; set; }
+        public DbSet<PeopleHobbies> PeopleHobbies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,6 +33,9 @@ namespace DecodeOficial.Infrastructure.Data.Context
 
                 b.Navigation("Profession");
             });
+
+            modelBuilder.Entity<PeopleHobbies>()
+                .HasKey(x => new { x.PersonId, x.HobbyId });
         }
 
         public override int SaveChanges()

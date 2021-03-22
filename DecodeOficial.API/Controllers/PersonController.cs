@@ -111,11 +111,18 @@ namespace DecodeOficial.API.Controllers
         ///     {
         ///        "firstName": "John",
         ///        "lastName": "Doe",
-        ///        "profession": "Accountant",
+        ///        "professionId": 0",
         ///        "birthDate": "1991-01-01",
         ///        "email": "johndoe@does.com",
-        ///        "hobbies": "Math, Sudoku",
-        ///     }    
+        ///        "hobbies": [
+        ///         {
+        ///             "hobbyId": 0
+        ///         },
+        ///         {
+        ///             "hobbyId": 0
+        ///         }
+        ///         ]
+        ///     }
         /// </remarks>
         /// <param name="personCreateDTO"></param>
         /// <returns>Confirmation message</returns>
@@ -127,8 +134,20 @@ namespace DecodeOficial.API.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] PersonCreateDTO personCreateDTO)
         {
+            foreach (var hobby in personCreateDTO.Hobbies)
+            {
+                var queryHobby = new HobbyGetByIdQuery { Id = hobby.HobbyId };
+                var resulthobby = await _mediator.Send(queryHobby);
+                if (resulthobby == null)
+                {
+                    Log.Error("PersonController: Inexistent hobby with Id: {0}", hobby.HobbyId.ToString());
+                    return NotFound("Hobby Id " + hobby.HobbyId.ToString() + " does not exist");
+                }
+            }
+
             var queryProfession = new ProfessionGetByIdQuery {Id = personCreateDTO.ProfessionId };
             var resultProfession = await _mediator.Send(queryProfession);
+
             if (resultProfession == null)
             {
                 Log.Error("PersonController: Inexistent profession with Id: {0}", personCreateDTO.ProfessionId.ToString());
@@ -157,10 +176,17 @@ namespace DecodeOficial.API.Controllers
         ///        "id": 1,
         ///        "firstName": "John",
         ///        "lastName": "Doe",
-        ///        "profession": "Accountant",
+        ///        "professionId": 0",
         ///        "birthDate": "1991-01-01",
-        ///        "email": "johndoe@does.com"
-        ///        "hobbies": "Math, Sudoku",
+        ///        "email": "johndoe@does.com",
+        ///        "hobbies": [
+        ///         {
+        ///             "hobbyId": 0
+        ///         },
+        ///         {
+        ///             "hobbyId": 0
+        ///         }
+        ///         ],
         ///        "status": 1
         ///     }
         /// </remarks>
@@ -174,6 +200,17 @@ namespace DecodeOficial.API.Controllers
         [HttpPut]
         public async Task<ActionResult> Put([FromBody] PersonUpdateDTO personUpdateDTO)
         {
+            foreach (var hobby in personUpdateDTO.Hobbies)
+            {
+                var queryHobby = new HobbyGetByIdQuery { Id = hobby.HobbyId };
+                var resulthobby = await _mediator.Send(queryHobby);
+                if (resulthobby == null)
+                {
+                    Log.Error("PersonController: Inexistent hobby with Id: {0}", hobby.HobbyId.ToString());
+                    return NotFound("Hobby Id " + hobby.HobbyId.ToString() + " does not exist");
+                }
+            }
+
             var query = new PersonGetByIdQuery { Id = personUpdateDTO.Id };
             var result = await _mediator.Send(query);
 
