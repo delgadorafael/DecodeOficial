@@ -12,7 +12,7 @@ namespace DecodeOficial.Application.Mapper
     {
         public AutoMapperConfiguration()
         {
-            CreateMap<Person, PersonDTO>().ReverseMap()
+            CreateMap<Person, PersonDTO>()
                 .ForMember(x => x.BirthDate, option => option.MapFrom(src => src.BirthDate.ToString("dd/MM/yyyy")));
             CreateMap<Person, PersonCreateDTO>().ReverseMap()
                 .ForMember(x => x.BirthDate, option => option.MapFrom(src => (DateTime)src.BirthDate));
