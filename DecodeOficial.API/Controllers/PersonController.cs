@@ -228,8 +228,9 @@ namespace DecodeOficial.API.Controllers
                 {
                     var command = new PersonUpdateCommand { personUpdateDTO = personUpdateDTO };
                     await _mediator.Send(command);
-                    var postUpdate = new PersonGetByIdQuery { Id = personUpdateDTO.Id };
-                    Log.Information("PersonController: Update person Id: {id}. From {@result} to {@postUpdate}", personUpdateDTO.Id.ToString(), result, postUpdate);
+                    var queryPostUpdate = new PersonGetByIdQuery { Id = personUpdateDTO.Id };
+                    var resultPostUpdate = await _mediator.Send(queryPostUpdate);
+                    Log.Information("PersonController: Update person Id: {id}. From {@result} to {@postUpdate}", personUpdateDTO.Id.ToString(), result, resultPostUpdate);
                     return Ok("Person updated!");
                 }
             }
