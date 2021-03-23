@@ -12,7 +12,7 @@ namespace DecodeOficial.Application.DTO.Person
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public ProfessionDTO Profession { get; set; }
-        public DateTime BirthDate { get; set; }
+        public string BirthDate { get; set; }
         public string Email { get; set; }
         public IEnumerable<PeopleHobbiesDTO> Hobbies { get; set; }
         public Status Status { get; set; }
