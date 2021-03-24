@@ -162,7 +162,7 @@ namespace DecodeOficial.API.Controllers
                 var queryPostUpdate = new ProfessionGetByIdQuery { Id = professionUpdateDTO.Id };
                 var resultPostUpdate = await _mediator.Send(queryPostUpdate);
                 Log.Information("{0}: Update profession Id: {id}. From {@result} to {@postUpdate}", thisController, professionUpdateDTO.Id.ToString(), result, resultPostUpdate);
-
+                return Ok("Profession updated!");
             }
             else
             {
