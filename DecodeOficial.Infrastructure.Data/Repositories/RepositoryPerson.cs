@@ -16,11 +16,6 @@ namespace DecodeOficial.Infrastructure.Data.Repositories
             _decodeContext = decodeContext;
         }
 
-        public IEnumerable<Person> GetByProfession(int id)
-        {
-            return _decodeContext.People.Where(p => p.ProfessionId == id).ToList();
-        }
-
         public override IEnumerable<Person> GetAll()
         {
             return _decodeContext.People.Include(h => h.Hobbies).Include(p => p.Profession).ToList();
@@ -39,6 +34,20 @@ namespace DecodeOficial.Infrastructure.Data.Repositories
             }
 
             base.Update(obj);
+        }
+
+        public IEnumerable<Person> GetPersonByProfession(int id)
+        {
+            return _decodeContext.People.Where(p => p.ProfessionId == id).ToList();
+        }
+
+        public IEnumerable<Person> SearchByName(string search)
+        {
+            return _decodeContext.People.AsQueryable()
+                .Where(x => x.FirstName.ToLower().Contains(search.Trim().ToLower()) || x.LastName.ToLower().Contains(search.Trim().ToLower()))
+                .Include(h => h.Hobbies)
+                .Include(p => p.Profession)
+                .ToList();
         }
     }
 }

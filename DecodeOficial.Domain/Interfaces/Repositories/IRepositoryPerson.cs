@@ -5,6 +5,7 @@ namespace DecodeOficial.Domain.Interfaces.Repositories
 {
     public interface IRepositoryPerson : IRepositoryBase<Person>
     {
-        IEnumerable<Person> GetByProfession(int id);
+        IEnumerable<Person> GetPersonByProfession(int id);
+        IEnumerable<Person> SearchByName(string search);
     }
 }

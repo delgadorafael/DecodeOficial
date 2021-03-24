@@ -29,7 +29,6 @@ namespace DecodeOficial.Domain.Servicies
         {
             _repositoryBase.Update(obj);
         }
-
         public void Remove(T obj)
         {
             _repositoryBase.Remove(obj);

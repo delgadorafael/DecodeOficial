@@ -1,6 +1,7 @@
 ﻿using DecodeOficial.Application.DTO.Hobby;
 using MediatR;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DecodeOficial.Application.Query
 {
