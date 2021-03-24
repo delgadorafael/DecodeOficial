@@ -159,8 +159,9 @@ namespace DecodeOficial.API.Controllers
             {
                 var command = new HobbyUpdateCommand { hobbyUpdateDTO = hobbyUpdateDTO };
                 await _mediator.Send(command);
-                var postUpdate = new PersonGetByIdQuery { Id = hobbyUpdateDTO.Id };
-                Log.Information("{0}: Update hobby Id: {id}. From {@result} to {@postUpdate}", thisController, hobbyUpdateDTO.Id.ToString(), result, postUpdate);
+                var queryPostUpdate = new HobbyGetByIdQuery { Id = hobbyUpdateDTO.Id };
+                var resultPostUpdate = await _mediator.Send(queryPostUpdate);
+                Log.Information("HobbyController: Update hobby Id: {id}. From {@result} to {@postUpdate}", hobbyUpdateDTO.Id.ToString(), result, resultPostUpdate);
                 return Ok("Hobby updated!");
             }
             else
