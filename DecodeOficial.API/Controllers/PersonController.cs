@@ -16,6 +16,7 @@ namespace DecodeOficial.API.Controllers
     public class PersonController : Controller
     {
         private readonly IMediator _mediator;
+        private const string thisController = nameof(PersonController);
 
         public PersonController(IMediator mediator)
         {
@@ -37,7 +38,7 @@ namespace DecodeOficial.API.Controllers
         {
             var query = new PersonGetAllQuery();
             var result = await _mediator.Send(query);
-            Log.Information("PersonController: Returned list of people with {0} registers", result.Count().ToString());
+            Log.Information("{0}: Returned list of people with {1} registers", thisController, result.Count().ToString());
             return Ok(result);
         }
         #endregion 
@@ -61,12 +62,12 @@ namespace DecodeOficial.API.Controllers
             var result = await _mediator.Send(query);
             if (result != null)
             {
-                Log.Information("PersonController: Returned person {@result}", result);
+                Log.Information("{0}: Returned person {@result}", thisController, result);
                 return Ok(result);
             }
             else
             {
-                Log.Error("PersonController: Returned null on searching by Id: {0}", id.ToString());
+                Log.Error("{0}: Returned null on searching by Id: {1}", thisController, id.ToString());
                 return NotFound();
             }
         }
@@ -89,11 +90,11 @@ namespace DecodeOficial.API.Controllers
             var result = await _mediator.Send(query);
             if (result.Count() != 0)
             {
-                Log.Information("PersonController: Returned list of people for searching with {0} registers with filter {1}", result.Count().ToString(), search);
+                Log.Information("{0}: Returned list of people for searching with {1} registers with filter {2}", thisController, result.Count().ToString(), search);
             }
             else
             {
-                Log.Error("PersonController: Returned null on searching names by filter: {0}", search);
+                Log.Error("{0}: Returned null on searching names by filter: {1}", thisController, search);
             }
             return Ok(result);
         }
@@ -127,9 +128,9 @@ namespace DecodeOficial.API.Controllers
         /// <param name="personCreateDTO"></param>
         /// <returns>Confirmation message</returns>
         /// <response code="200">Returns a confirmation message</response>
-        /// <response code="404">If the item is null</response>
+        /// <response code="400">Returns a error message stating why the request couldn't be executed</response>
         #endregion
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] PersonCreateDTO personCreateDTO)
@@ -140,8 +141,8 @@ namespace DecodeOficial.API.Controllers
                 var resulthobby = await _mediator.Send(queryHobby);
                 if (resulthobby == null)
                 {
-                    Log.Error("PersonController: Inexistent hobby with Id: {0}", hobby.HobbyId.ToString());
-                    return NotFound("Hobby Id " + hobby.HobbyId.ToString() + " does not exist");
+                    Log.Error("{0}: Inexistent hobby with Id: {1}", thisController, hobby.HobbyId.ToString());
+                    return BadRequest("Hobby Id " + hobby.HobbyId.ToString() + " does not exist");
                 }
             }
 
@@ -150,14 +151,14 @@ namespace DecodeOficial.API.Controllers
 
             if (resultProfession == null)
             {
-                Log.Error("PersonController: Inexistent profession with Id: {0}", personCreateDTO.ProfessionId.ToString());
-                return NotFound("Inexistent profession");
+                Log.Error("{0}: Inexistent profession with Id: {1}", thisController, personCreateDTO.ProfessionId.ToString());
+                return BadRequest("Inexistent profession");
             }
             else
             {
                 var command = new PersonCreateCommand { personCreateDTO = personCreateDTO };
                 await _mediator.Send(command);
-                Log.Information("PersonController: Created person {@person}", personCreateDTO);
+                Log.Information("{0}: Created person {@person}", thisController, personCreateDTO);
                 return Ok("Person registered!");
             }
         }
@@ -193,8 +194,10 @@ namespace DecodeOficial.API.Controllers
         /// <param name="personUpdateDTO"></param>
         /// <returns>Confirmation message</returns>
         /// <response code="200">Returns a confirmation message</response>
+        /// <response code="400">Returns a error message stating why the request couldn't be executed</response>
         /// <response code="404">If the item is null</response>
         #endregion
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPut]
@@ -206,8 +209,8 @@ namespace DecodeOficial.API.Controllers
                 var resulthobby = await _mediator.Send(queryHobby);
                 if (resulthobby == null)
                 {
-                    Log.Error("PersonController: Inexistent hobby with Id: {0}", hobby.HobbyId.ToString());
-                    return NotFound("Hobby Id " + hobby.HobbyId.ToString() + " does not exist");
+                    Log.Error("{0}: Inexistent hobby with Id: {1}", thisController, hobby.HobbyId.ToString());
+                    return BadRequest("Hobby Id " + hobby.HobbyId.ToString() + " does not exist");
                 }
             }
 
@@ -221,7 +224,7 @@ namespace DecodeOficial.API.Controllers
 
                 if (resultProfession == null)
                 {
-                    Log.Error("PersonController: Inexistent profession with Id: {0}", personUpdateDTO.ProfessionId.ToString());
+                    Log.Error("{0}: Inexistent profession with Id: {1}", thisController, personUpdateDTO.ProfessionId.ToString());
                     return NotFound("Inexistent profession");
                 }
                 else
@@ -229,13 +232,13 @@ namespace DecodeOficial.API.Controllers
                     var command = new PersonUpdateCommand { personUpdateDTO = personUpdateDTO };
                     await _mediator.Send(command);
                     var postUpdate = new PersonGetByIdQuery { Id = personUpdateDTO.Id };
-                    Log.Information("PersonController: Update person Id: {id}. From {@result} to {@postUpdate}", personUpdateDTO.Id.ToString(), result, postUpdate);
+                    Log.Information("{0}: Update person Id: {id}. From {@result} to {@postUpdate}", thisController, personUpdateDTO.Id.ToString(), result, postUpdate);
                     return Ok("Person updated!");
                 }
             }
             else
             {
-                Log.Error("PersonController: Returned null on searching for update with Id: {0}", personUpdateDTO.Id.ToString());
+                Log.Error("{0}: Returned null on searching for update with Id: {1}", thisController, personUpdateDTO.Id.ToString());
                 return NotFound();
             }
         }
@@ -263,12 +266,12 @@ namespace DecodeOficial.API.Controllers
             {
                 var command = new PersonDeleteCommand { Id = id };
                 await _mediator.Send(command);
-                Log.Information("PersonController: Deleted person {@result}", result);
+                Log.Information("{0}: Deleted person {@result}", thisController, result);
                 return Ok("Person deleted!");
             }
             else
             {
-                Log.Error("PersonController: Returned null on searching for delete by Id: {0}", id.ToString());
+                Log.Error("{0}: Returned null on searching for delete by Id: {1}", thisController, id.ToString());
                 return NotFound();
             }
         }

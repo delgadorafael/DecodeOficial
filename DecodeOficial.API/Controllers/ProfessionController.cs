@@ -16,6 +16,7 @@ namespace DecodeOficial.API.Controllers
     public class ProfessionController : Controller
     {
         private readonly IMediator _mediator;
+        private const string thisController = nameof(ProfessionController);
 
         public ProfessionController(IMediator mediator)
         {
@@ -37,7 +38,7 @@ namespace DecodeOficial.API.Controllers
         {
             var query = new ProfessionGetAllQuery();
             var result = await _mediator.Send(query);
-            Log.Information("ProfessionController: Returned list of professions with {0} registers", result.Count().ToString());
+            Log.Information("{0}: Returned list of professions with {1} registers", thisController, result.Count().ToString());
             return Ok(result);
         }
         #endregion 
@@ -61,12 +62,12 @@ namespace DecodeOficial.API.Controllers
             var result = await _mediator.Send(query);
             if (result != null)
             {
-                Log.Information("ProfessionController: Returned profession {@result}", result);
+                Log.Information("{0}: Returned profession {@result}", thisController, result);
                 return Ok(result);
             }
             else
             {
-                Log.Error("ProfessionController: Returned null on searching by Id: {0}", id.ToString());
+                Log.Error("{0}: Returned null on searching by Id: {1}", thisController, id.ToString());
                 return NotFound();
             }
         }
@@ -89,11 +90,11 @@ namespace DecodeOficial.API.Controllers
             var result = await _mediator.Send(query);
             if (result.Count() != 0)
             {
-                Log.Information("ProfessionController: Returned list of professions for searching with {0} registers with filter {1}", result.Count().ToString(), search);
+                Log.Information("{0}: Returned list of professions for searching with {1} registers with filter {2}", thisController, result.Count().ToString(), search);
             }
             else
             {
-                Log.Error("ProfessionController: Returned null on searching roles by filter: {0}", search);
+                Log.Error("{0}: Returned null on searching roles by filter: {1}", thisController, search);
             }
             return Ok(result);
         }
@@ -115,16 +116,14 @@ namespace DecodeOficial.API.Controllers
         /// <param name="professionCreateDTO"></param>
         /// <returns>Confirmation message</returns>
         /// <response code="200">Returns a confirmation message</response>
-        /// <response code="404">If the item is null</response>
         #endregion
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] ProfessionCreateDTO professionCreateDTO)
         {
             var command = new ProfessionCreateCommand { professionCreateDTO = professionCreateDTO };
             await _mediator.Send(command);
-            Log.Information("ProfessionController: Created profession {@profession}", professionCreateDTO);
+            Log.Information("{0}: Created profession {@profession}", thisController, professionCreateDTO);
             return Ok("Profession registered!");
         }
         #endregion
@@ -160,13 +159,14 @@ namespace DecodeOficial.API.Controllers
             {
                 var command = new ProfessionUpdateCommand { professionUpdateDTO = professionUpdateDTO };
                 await _mediator.Send(command);
-                var postUpdate = new PersonGetByIdQuery { Id = professionUpdateDTO.Id };
-                Log.Information("ProfessionController: Update profession Id: {id}. From {@result} to {@postUpdate}", professionUpdateDTO.Id.ToString(), result, postUpdate);
+                var queryPostUpdate = new ProfessionGetByIdQuery { Id = professionUpdateDTO.Id };
+                var resultPostUpdate = await _mediator.Send(queryPostUpdate);
+                Log.Information("{0}: Update profession Id: {id}. From {@result} to {@postUpdate}", thisController, professionUpdateDTO.Id.ToString(), result, resultPostUpdate);
                 return Ok("Profession updated!");
             }
             else
             {
-                Log.Error("ProfessionController: Returned null on searching for update with Id: {0}", professionUpdateDTO.Id.ToString());
+                Log.Error("{0}: Returned null on searching for update with Id: {1}", thisController, professionUpdateDTO.Id.ToString());
                 return NotFound();
             }
         }
@@ -180,9 +180,11 @@ namespace DecodeOficial.API.Controllers
         /// <param name="id">The Id of the profession</param>
         /// <returns>Confirmation message</returns>
         /// <response code="200">Returns a confirmation message</response>
+        /// <response code="400">Returns a error message stating why the request couldn't be executed</response>
         /// <response code="404">If the item is null</response>
         #endregion
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
@@ -196,20 +198,20 @@ namespace DecodeOficial.API.Controllers
                 var resultProfession = await _mediator.Send(queryProfession);
                 if (resultProfession != null)
                 {
-                    Log.Error("ProfessionController: Can't delete profession. The profession is currently related to {0} registers", resultProfession.Count().ToString());
-                    return NotFound("Can't delete profession. The profession is currently related to a register");
+                    Log.Error("{0}: Can't delete profession. The profession is currently related to {1} registers", thisController, resultProfession.Count().ToString());
+                    return BadRequest("Can't delete profession. The profession is currently related to a person");
                 }
                 else
                 {
                     var command = new ProfessionDeleteCommand { Id = id };
                     await _mediator.Send(command);
-                    Log.Information("ProfessionController: Deleted profession {@result}", result);
+                    Log.Information("{0}: Deleted profession {@result}", thisController, result);
                     return Ok("Profession deleted!");
                 }
             }
             else
             {
-                Log.Error("ProfessionController: Returned null on searching for delete by Id: {0}", id.ToString());
+                Log.Error("{0}: Returned null on searching for delete by Id: {1}", thisController, id.ToString());
                 return NotFound();
             }
         }
