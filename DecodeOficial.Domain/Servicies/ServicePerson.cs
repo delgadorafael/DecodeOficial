@@ -14,9 +14,14 @@ namespace DecodeOficial.Domain.Servicies
             _repositoryPerson = repositoryPerson;
         }
 
-        public IEnumerable<Person> GetByProfession(int id)
+        public IEnumerable<Person> GetPersonByProfession(int id)
         {
-            return _repositoryPerson.GetByProfession(id);
+            return _repositoryPerson.GetPersonByProfession(id);
+        }
+
+        public IEnumerable<Person> SearchByName(string search)
+        {
+            return _repositoryPerson.SearchByName(search);
         }
     }
 }

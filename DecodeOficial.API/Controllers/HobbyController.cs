@@ -16,6 +16,7 @@ namespace DecodeOficial.API.Controllers
     public class HobbyController : Controller
     {
         private readonly IMediator _mediator;
+        private const string thisController = nameof(HobbyController);
 
         public HobbyController(IMediator mediator)
         {
@@ -37,7 +38,7 @@ namespace DecodeOficial.API.Controllers
         {
             var query = new HobbyGetAllQuery();
             var result = await _mediator.Send(query);
-            Log.Information("HobbyController: Returned list of hobbies with {0} registers", result.Count().ToString());
+            Log.Information("{0}: Returned list of hobbies with {1} registers", thisController, result.Count().ToString());
             return Ok(result);
         }
         #endregion 
@@ -61,12 +62,12 @@ namespace DecodeOficial.API.Controllers
             var result = await _mediator.Send(query);
             if (result != null)
             {
-                Log.Information("HobbyController: Returned hobby {@result}", result);
+                Log.Information("{0}: Returned hobby {@result}", thisController, result);
                 return Ok(result);
             }
             else
             {
-                Log.Error("HobbyController: Returned null on searching by Id: {0}", id.ToString());
+                Log.Error("{0}: Returned null on searching by Id: {1}", thisController, id.ToString());
                 return NotFound();
             }
         }
@@ -89,11 +90,11 @@ namespace DecodeOficial.API.Controllers
             var result = await _mediator.Send(query);
             if (result.Count() != 0)
             {
-                Log.Information("HobbyController: Returned list of hobbies for searching with {0} registers with filter {1}", result.Count().ToString(), search);
+                Log.Information("{0}: Returned list of hobbies for searching with {1} registers with filter {2}", thisController, result.Count().ToString(), search);
             }
             else
             {
-                Log.Error("HobbyController: Returned null on searching roles by filter: {0}", search);
+                Log.Error("{0}: Returned null on searching roles by filter: {1}", thisController, search);
             }
             return Ok(result);
         }
@@ -115,16 +116,14 @@ namespace DecodeOficial.API.Controllers
         /// <param name="hobbyCreateDTO"></param>
         /// <returns>Confirmation message</returns>
         /// <response code="200">Returns a confirmation message</response>
-        /// <response code="404">If the item is null</response>
         #endregion
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] HobbyCreateDTO hobbyCreateDTO)
         {
             var command = new HobbyCreateCommand { hobbyCreateDTO = hobbyCreateDTO };
             await _mediator.Send(command);
-            Log.Information("HobbyController: Created hobby {@hobby}", hobbyCreateDTO);
+            Log.Information("{0}: Created hobby {@hobby}", thisController, hobbyCreateDTO);
             return Ok("Hobby registered!");
         }
         #endregion
@@ -167,7 +166,7 @@ namespace DecodeOficial.API.Controllers
             }
             else
             {
-                Log.Error("HobbyController: Returned null on searching for update with Id: {0}", hobbyUpdateDTO.Id.ToString());
+                Log.Error("{0}: Returned null on searching for update with Id: {1}", thisController, hobbyUpdateDTO.Id.ToString());
                 return NotFound();
             }
         }
@@ -181,10 +180,12 @@ namespace DecodeOficial.API.Controllers
         /// <param name="id">The Id of the hobby</param>
         /// <returns>Confirmation message</returns>
         /// <response code="200">Returns a confirmation message</response>
+        /// <response code="400">Returns a error message stating why the request couldn't be executed</response>
         /// <response code="404">If the item is null</response>
         #endregion
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
@@ -197,20 +198,20 @@ namespace DecodeOficial.API.Controllers
                 var result2 = await _mediator.Send(query2);
                 if (result2 != null)
                 {
-                    Log.Information("HobbyController: Unable to delete hobby {@result} due to existing associations", result);
+                    Log.Information("{0}: Unable to delete hobby {@result} due to existing associations", thisController, result);
                     return BadRequest("Unable to delete hobby due to existing associations!");
                 }
                 else
                 {
                     var command = new HobbyDeleteCommand { Id = id };
                     await _mediator.Send(command);
-                    Log.Information("HobbyController: Deleted hobby {@result}", result);
+                    Log.Information("{0}: Deleted hobby {@result}", thisController, result);
                     return Ok("Hobby deleted!");
                 }
             }
             else
             {
-                Log.Error("HobbyController: Returned null on searching for delete by Id: {0}", id.ToString());
+                Log.Error("{0}: Returned null on searching for delete by Id: {1}", thisController, id.ToString());
                 return NotFound();
             }
         }

@@ -21,7 +21,7 @@ namespace DecodeOficial.Application.QueryHandler
 
         protected override IEnumerable<PersonDTO> Handle(PersonGetByProfessionQuery request)
         {
-            var result = _servicePerson.GetByProfession(request.Id);
+            var result = _servicePerson.GetPersonByProfession(request.Id);
             return _mapper.Map<IEnumerable<Person>, IEnumerable<PersonDTO>>(result);
         }
     }

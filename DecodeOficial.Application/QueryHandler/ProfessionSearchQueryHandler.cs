@@ -22,8 +22,7 @@ namespace DecodeOficial.Application.QueryHandler
 
         protected override IEnumerable<ProfessionDTO> Handle(ProfessionSearchQuery request)
         {
-            var result = _serviceProfession.GetAll()
-                .Where(x => x.Role.ToLower().Contains(request.search.ToLower()));
+            var result = _serviceProfession.SearchByRole(request.search);
             return _mapper.Map<IEnumerable<Profession>, IEnumerable<ProfessionDTO>>(result);
         }
     }

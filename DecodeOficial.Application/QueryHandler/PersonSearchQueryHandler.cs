@@ -22,10 +22,8 @@ namespace DecodeOficial.Application.QueryHandler
 
         protected override IEnumerable<PersonDTO> Handle(PersonSearchQuery request)
         {
-            var result = _servicePerson.GetAll()
-                .Where(x => x.FirstName.ToLower().Contains(request.Search.ToLower()) || 
-                            x.LastName.ToLower().Contains(request.Search.ToLower()));
-            return _mapper.Map< IEnumerable<Person>, IEnumerable<PersonDTO>>(result);
+            var result = _servicePerson.SearchByName(request.Search);
+            return _mapper.Map<IEnumerable<Person>, IEnumerable<PersonDTO>>(result);
         }
     }
 }

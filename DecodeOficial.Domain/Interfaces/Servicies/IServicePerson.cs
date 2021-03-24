@@ -5,6 +5,7 @@ namespace DecodeOficial.Domain.Interfaces.Servicies
 {
     public interface IServicePerson : IServiceBase<Person>
     {
-        IEnumerable<Person> GetByProfession(int id);
+        IEnumerable<Person> GetPersonByProfession(int id);
+        IEnumerable<Person> SearchByName(string search);
     }
 }

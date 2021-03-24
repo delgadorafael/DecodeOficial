@@ -1,6 +1,7 @@
 ﻿using DecodeOficial.Domain.Entities;
 using DecodeOficial.Domain.Interfaces.Repositories;
 using DecodeOficial.Domain.Interfaces.Servicies;
+using System.Collections.Generic;
 
 namespace DecodeOficial.Domain.Servicies
 {
@@ -11,6 +12,11 @@ namespace DecodeOficial.Domain.Servicies
         public ServiceHobby(IRepositoryHobby repositoryHobby) : base(repositoryHobby)
         {
             _repositoryHobby = repositoryHobby;
+        }
+
+        public IEnumerable<Hobby> SearchByHobby(string search)
+        {
+            return _repositoryHobby.SearchByHobby(search);
         }
     }
 }

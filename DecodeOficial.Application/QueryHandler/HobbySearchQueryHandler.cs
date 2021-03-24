@@ -22,8 +22,7 @@ namespace DecodeOficial.Application.QueryHandler
 
         protected override IEnumerable<HobbyDTO> Handle(HobbySearchQuery request)
         {
-            var result = _serviceHobby.GetAll()
-                .Where(x => x.Name.ToLower().Contains(request.Search.ToLower()));
+            var result = _serviceHobby.SearchByHobby(request.Search);
             return _mapper.Map<IEnumerable<Hobby>, IEnumerable<HobbyDTO>>(result);
         }
     }
