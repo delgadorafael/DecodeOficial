@@ -196,7 +196,7 @@ namespace DecodeOficial.API.Controllers
             {
                 var queryProfession = new PersonGetByProfessionQuery { Id = id };
                 var resultProfession = await _mediator.Send(queryProfession);
-                if (resultProfession != null)
+                if (resultProfession.Count() > 0)
                 {
                     Log.Error("{0}: Can't delete profession. The profession is currently related to {1} registers", thisController, resultProfession.Count().ToString());
                     return BadRequest("Can't delete profession. The profession is currently related to a person");
